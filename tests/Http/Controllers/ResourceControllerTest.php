@@ -7,11 +7,20 @@ use DoubleThreeDigital\Runway\Runway;
 use DoubleThreeDigital\Runway\Tests\Post;
 use DoubleThreeDigital\Runway\Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\File;
+use Statamic\Facades\Role;
 use Statamic\Facades\User;
 
 class ResourceControllerTest extends TestCase
 {
     use RefreshDatabase;
+
+    public function setUp(): void
+    {
+        parent::setUp();
+
+        File::delete(__DIR__ . '/../../vendor/orchestra/testbench-core/laravel/resources/users/roles.yaml');
+    }
 
     /** @test */
     public function get_model_index()
@@ -31,9 +40,48 @@ class ResourceControllerTest extends TestCase
     }
 
     /** @test */
+    public function get_model_index_as_user_with_permissions()
+    {
+        $this->markTestIncomplete();
+
+        $role = Role::make('special-admin')
+            ->title('Special Admin')
+            ->permissions(['View Posts'])
+            ->save();
+
+        $user = User::make()->roles(['special-admin'])->save();
+
+        $posts = $this->postFactory(2);
+
+        $this->actingAs($user)
+            ->get(cp_route('runway.index', ['resourceHandle' => 'post']))
+            ->assertOk()
+            ->assertViewIs('runway::index')
+            ->assertSee([
+                'listing-config',
+                'columns',
+            ]);
+    }
+
+    /** @test */
     public function can_create_resource()
     {
         $user = User::make()->makeSuper()->save();
+
+        $this->actingAs($user)
+            ->get(cp_route('runway.create', ['resourceHandle' => 'post']))
+            ->assertOk();
+    }
+
+    /** @test */
+    public function can_create_resource_as_user_with_permissions()
+    {
+        $role = Role::make('special-admin')
+            ->title('Special Admin')
+            ->permissions(['View Posts', 'Edit Posts', 'Create new Post'])
+            ->save();
+
+        $user = User::make()->roles(['special-admin'])->save();
 
         $this->actingAs($user)
             ->get(cp_route('runway.create', ['resourceHandle' => 'post']))
