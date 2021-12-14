@@ -60,6 +60,11 @@ class Resource
     {
         return $this->fluentlyGetOrSet('blueprint')
             ->setter(function ($value) {
+
+                if (is_string($value) && class_exists($value)) {
+                    return (new $value)();
+                }
+
                 if (is_string($value)) {
                     return \Statamic\Facades\Blueprint::find($value);
                 }
