@@ -29,7 +29,7 @@
             :errors="errors"
             @updated="values = $event"
         >
-            <div>
+            <div class=" p-1" slot-scope="{ setFieldValue, setFieldMeta }">
                 <component
                     v-for="component in components"
                     :key="component.id"
@@ -91,7 +91,7 @@ export default {
             title: this.initialTitle,
 
             readonly: false, // TODO: might do this in the future
-            
+
             errors: {},
             saving: false,
             containerWidth: null,
@@ -112,6 +112,16 @@ export default {
     },
 
     methods: {
+
+        updateField(handle, value, setStoreValue = null) {
+
+            this.values[handle] = value;
+
+            if (setStoreValue) {
+                setStoreValue(handle, value);
+            }
+        },
+
         save() {
             this.saving = true
             this.clearErrors()
@@ -153,11 +163,13 @@ export default {
         },
 
         setFieldValue(handle, value) {
+
             this.$refs.container.setFieldValue(handle, value)
         },
 
         setFieldMeta(state, payload) {
             const { handle, value } = payload
+            console.log('handle, value',handle, value, payload);
             state.meta[handle] = value
         },
     },

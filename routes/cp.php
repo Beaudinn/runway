@@ -6,6 +6,7 @@ use DoubleThreeDigital\Runway\Http\Controllers\ResourceListingController;
 use Illuminate\Support\Facades\Route;
 
 Route::name('runway.')->prefix('runway')->group(function () {
+
     Route::get('/{resourceHandle}', [ResourceController::class, 'index'])->name('index');
 
     Route::get('/{resourceHandle}/listing-api', [ResourceListingController::class, 'index'])->name('listing-api');
