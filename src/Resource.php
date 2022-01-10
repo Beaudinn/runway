@@ -46,6 +46,19 @@ class Resource
             ->args(func_get_args());
     }
 
+    public function docs($docs = null)
+    {
+        return $this->fluentlyGetOrSet('docs')
+            ->setter(function ($value) {
+                if (! $value) {
+                    return false;
+                }
+
+                return $value;
+            })
+            ->args(func_get_args());
+    }
+
     public function singular(): string
     {
         return Str::singular($this->name);

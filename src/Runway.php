@@ -30,6 +30,10 @@ class Runway
                     $resource->hidden($config['hidden']);
                 }
 
+                if (isset($config['docs'])) {
+                    $resource->docs($config['docs']);
+                }
+
                 if (isset($config['route'])) {
                     $resource->route($config['route']);
                 }

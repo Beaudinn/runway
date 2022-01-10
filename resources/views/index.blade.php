@@ -28,4 +28,10 @@
             'route' => cp_route('runway.create', ['resourceHandle' => $resource->handle()]),
         ])
      @endif
+
+    @includeWhen($resource->docs(), 'statamic::partials.docs-callout', [
+    'topic' => $resource->singular(),
+    'url' => Statamic::docsUrl($resource->docs())
+])
+
 @endsection
