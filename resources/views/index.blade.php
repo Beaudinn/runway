@@ -6,12 +6,15 @@
     <div class="flex items-center justify-between mb-3">
         <h1 class="flex-1">{{ $title }}</h1>
 
+        @if(\Statamic\Facades\User::current()->hasPermission("Create new {$resource->plural()}")
+            || \Statamic\Facades\User::current()->isSuper())
         <a
             class="btn-primary"
             href="{{ cp_route('runway.create', ['resourceHandle' => $resource->handle()]) }}"
         >
             Create {{ $resource->singular() }}
         </a>
+        @endif
     </div>
 
     @if ($recordCount > 0)

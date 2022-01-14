@@ -74,6 +74,7 @@ class ServiceProvider extends AddonServiceProvider
 
                 $nav->content($resource->name())
                     ->icon($resource->cpIcon())
+                    ->can("View {$resource->plural()}")
                     ->route('runway.index', ['resourceHandle' => $resource->handle()]);
             }
         });
