@@ -5,8 +5,8 @@
 @section('content')
     <div class="flex items-center justify-between mb-3">
         <h1 class="flex-1">{{ $title }}</h1>
-
-        @if(\Statamic\Facades\User::current()->hasPermission("Create new {$resource->plural()}")
+        
+        @if(\Statamic\Facades\User::current()->hasPermission("Create new {$resource->singular()}")
             || \Statamic\Facades\User::current()->isSuper())
         <a
             class="btn-primary"
